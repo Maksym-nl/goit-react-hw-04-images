@@ -1,32 +1,53 @@
-import { Component } from 'react';
+// import { Component } from 'react';
+import { useEffect } from 'react';
 import { Overlay } from './Modal.styled';
 import { ModalContainer } from './Modal.styled';
-export class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.pressOnesc);
-  }
+// export class Modal extends Component {
+//   componentDidMount() {
+//     window.addEventListener('keydown', pressOnesc);
+//   }
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.pressOnesc);
-  }
-  onClickBackdrope = event => {
+export const Modal = ({ largeImage, tag, onClose }) => {
+  const onClickBackdrope = event => {
     if (event.currentTarget === event.target) {
-      this.props.onClose();
+      onClose();
     }
   };
-  pressOnesc = event => {
-    if (event.code === 'Escape') {
-      this.props.onClose();
-    }
-  };
-  render() {
-    const { largeImage, tag } = this.props.largeImage;
-    return (
-      <Overlay onClick={this.onClickBackdrope}>
-        <ModalContainer>
-          <img src={largeImage} alt={tag} width="735" />
-        </ModalContainer>
-      </Overlay>
-    );
-  }
-}
+
+  // componentWillUnmount() {
+  //   window.removeEventListener('keydown', pressOnesc);
+  // }
+  useEffect(() => {
+    const pressOnesc = event => {
+      if (event.code === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', pressOnesc);
+    return () => {
+      window.removeEventListener('keydown', pressOnesc);
+    };
+  }, [onClose]);
+
+  // const onClickBackdrope = event => {
+  //   if (event.currentTarget === event.target) {
+  //     onClose();
+  //   }
+  // };
+
+  // const pressOnesc = event => {
+  //   if (event.code === 'Escape') {
+  //     onClose();
+  //   }
+  // };
+
+  // render() {
+  //   const { largeImage, tag } = largeImage;
+  return (
+    <Overlay onClick={onClickBackdrope}>
+      <ModalContainer>
+        <img src={largeImage} alt={tag} width="735" />
+      </ModalContainer>
+    </Overlay>
+  );
+};
