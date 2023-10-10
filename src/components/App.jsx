@@ -1,7 +1,7 @@
 // import { Component } from 'react';
 import { Loader } from './Loader/Loader';
 import { fetchItems } from '../api/api';
-import SearchBar from './Searchbar/Searchbar';
+import { SearchBar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { toast, ToastContainer } from 'react-toastify';
 import { Button } from './Button/Button';
@@ -10,16 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { GlobalStyle } from './GlobalStyle';
 import { useState } from 'react';
 import { useEffect } from 'react';
-// export class App extends Component {
-//   state = {
-//     items: [],
-//     value: '',
-//     page: 1,
-//     isLoading: false,
-//     modalInfo: {},
-//     showModal: false,
-//     loadMore: false,
-//   };
+
 export const App = () => {
   const [items, setItems] = useState([]);
   const [value, setValue] = useState('');
@@ -28,65 +19,57 @@ export const App = () => {
   const [modalInfo, setmodalInfo] = useState();
   const [showModal, setshowModal] = useState(false);
   const [loadMore, setloadMore] = useState(false);
-};
-// componentDidUpdate(prevProps, prevState) {
-//   if (
-//     prevState.value !== this.state.value ||
-//     this.state.page !== prevState.page
-//   ) {
-//     this.getImages();
-//   }
-// }
 
-useEffect(() => {
-  if (value) {
-    const getItems = async () => {
-      setisLoading(true);
-      try {
-        const images = await fetchItems(value, page);
-        toast(`we have ${images.totalHits} images`);
-        setItems(prewState => [...prewState.items, ...images.hits]),
+  useEffect(() => {
+    if (value) {
+      const getItems = async () => {
+        setisLoading(true);
+        try {
+          const images = await fetchItems(value, page);
+          toast(`we have ${images.totalHits} images`);
+          setItems(prewState => [...prewState, ...images.hits]);
           setloadMore(page < Math.ceil(images.totalHits / 12));
-      } catch (error) {
-        console.log(error.messege);
-      } finally {
-        setisLoading(false);
-      }
-    };
-    getItems();
-  }
-}, [page, value]);
+        } catch (error) {
+          console.log(error.messege);
+        } finally {
+          setisLoading(false);
+        }
+      };
+      getItems();
+    }
+  }, [page, value]);
 
-const handleSubmit = data => {
-  setItems([]);
-  setValue(data);
-  setPage(1);
+  const handleSubmit = data => {
+    setItems([]);
+    setValue(data);
+    setPage(1);
+  };
+
+  const loadmore = () => {
+    this.setState(prewState => ({ page: prewState.page + 1 }));
+  };
+
+  const getModalImages = imageInfo => {
+    setmodalInfo(imageInfo);
+    togalModal();
+  };
+
+  const togalModal = () => {
+    prewState => ({ showModal: !prewState.showModal });
+  };
+
+  // render() {
+  //   const { items, loadMore, isLoading, showModal, modalInfo } = this.state;
+  return (
+    <div>
+      <GlobalStyle />
+      <SearchBar onSubmit={handleSubmit} />
+      <ImageGallery items={items} onClick={getModalImages} />
+      <ToastContainer autoClose={3000} />
+
+      {loadMore && <Button onClick={loadmore} />}
+      {isLoading && <Loader />}
+      {showModal && <Modal largeImage={modalInfo} onClose={togalModal} />}
+    </div>
+  );
 };
-
-const loadmore = () => {
-  this.setState(prewState => ({ page: prewState.page + 1 }));
-};
-
-const getModalImages = imageInfo => {
-  setModalInfo(imageInfo);
-  togalModal();
-};
-
-const togalModal = () => {
-  prewState => ({ showModal: !prewState.showModal });
-};
-
-// render() {
-//   const { items, loadMore, isLoading, showModal, modalInfo } = this.state;
-return (
-  <div>
-    <GlobalStyle />
-    <SearchBar onSubmit={handleSubmit} />
-    <ImageGallery items={items} onClick={getModalImages} />
-    <ToastContainer autoClose={3000} />
-
-    {loadMore && <Button onClick={loadmore} />}
-    {isLoading && <Loader />}
-    {showModal && <Modal largeImage={modalInfo} onClose={togalModal} />}
-  </div>
-);
