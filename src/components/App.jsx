@@ -46,7 +46,8 @@ export const App = () => {
   };
 
   const loadmore = () => {
-    this.setState(prewState => ({ page: prewState.page + 1 }));
+    setPage(prevPage => prevPage + 1);
+    // this.setState(prewState => ({ page: prewState.page + 1 }));
   };
 
   const getModalImages = imageInfo => {
@@ -55,7 +56,8 @@ export const App = () => {
   };
 
   const togalModal = () => {
-    prewState => ({ showModal: !prewState.showModal });
+    setshowModal(prevState => !prevState);
+    // prevState => ({ showModal: !prevState.showModal });
   };
 
   // render() {
