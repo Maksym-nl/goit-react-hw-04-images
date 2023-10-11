@@ -46,7 +46,7 @@ export const Modal = ({ largeImage, tag, onClose }) => {
   return (
     <Overlay onClick={onClickBackdrope}>
       <ModalContainer>
-        <img src={largeImage} alt={tag} width="735" />
+        <img src={largeImage.largeImage} alt={tag} />
       </ModalContainer>
     </Overlay>
   );
