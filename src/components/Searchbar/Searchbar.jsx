@@ -28,7 +28,7 @@ export const SearchBar = ({ onSubmit }) => {
     <Header>
       <form type="submit" onSubmit={handleSubmit}>
         <button>
-          <span>Search</span>
+          <span>Пошук</span>
         </button>
 
         <input
